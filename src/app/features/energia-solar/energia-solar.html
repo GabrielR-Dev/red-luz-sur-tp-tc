@@ -1,0 +1,100 @@
+<section class="section solar-hero anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <h1 class="section__title">Energía Solar y Sustentabilidad</h1>
+    <p class="section__subtitle">Creemos en una energía limpia, barata y nuestra. Por eso impulsamos la instalación de paneles solares en los hogares del barrio.</p>
+  </div>
+</section>
+
+<section class="section section--alt anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <div class="solar-intro">
+      <div class="solar-intro__img anim-fade-left anim-delay-1" appScrollAnimation>
+        <img src="/img/paneles solares.jpg" alt="Paneles solares instalados en un techo del barrio" loading="lazy">
+      </div>
+      <div class="solar-intro__text anim-fade-right anim-delay-2" appScrollAnimation>
+        <h2>¿Por qué paneles solares?</h2>
+        <ul>
+          <li><strong>Menos costo:</strong> Reducís tu factura de luz hasta un 60%.</li>
+          <li><strong>Más autonomía:</strong> Generás tu propia energía y no dependés de cortes.</li>
+          <li><strong>Barrio sustentable:</strong> Cuidamos el ambiente entre todos.</li>
+          <li><strong>Financiación cooperativa:</strong> Accedé a paneles con créditos accesibles para socios.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <h2 class="section__title" style="text-align:center;">Diferencia entre W y kWh</h2>
+    <p class="section__subtitle" style="text-align:center;margin-left:auto;margin-right:auto;">Entendé estos conceptos para interpretar mejor tu factura y tu consumo.</p>
+    <div class="w-vs-kwh">
+      <div class="w-vs-kwh__card">
+        <h3 class="w-vs-kwh__title">W — Watt (Potencia)</h3>
+        <p class="w-vs-kwh__text">Indica cuánta energía consume un dispositivo <strong>en un instante</strong>. Es como la velocidad de un auto: qué tan rápido consume.</p>
+        <p class="w-vs-kwh__example">Ej: Un aire acondicionado tiene <strong>2000 W</strong> (2 kW). Eso no es lo que gasta en todo el mes, sino lo que consume mientras está encendido.</p>
+      </div>
+      <div class="w-vs-kwh__vs">
+        <span class="w-vs-kwh__vs-text">≠</span>
+      </div>
+      <div class="w-vs-kwh__card">
+        <h3 class="w-vs-kwh__title">kWh — Kilowatt-hora (Consumo)</h3>
+        <p class="w-vs-kwh__text">Mide cuánta energía consumiste <strong>a lo largo del tiempo</strong>. Es como la distancia recorrida: la potencia × las horas de uso.</p>
+        <p class="w-vs-kwh__example">Ej: Ese mismo aire de 2000 W encendido 5 horas por día consume <strong>10 kWh por día</strong> (2 kW × 5 h). Eso es lo que pagás en tu factura.</p>
+      </div>
+    </div>
+    <div class="w-vs-kwh__formula">
+      <p><strong>Fórmula simple:</strong> <code>kWh = W ÷ 1000 × horas de uso</code></p>
+      <p class="w-vs-kwh__formula-note">Tu factura multiplica los kWh consumidos por el precio de tu cooperativa ($ {{ costoKwh }} / kWh).</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="section anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <h2 class="section__title" style="text-align:center;">Consumo típico de una casa</h2>
+    <p class="section__subtitle" style="text-align:center;margin-left:auto;margin-right:auto;">Conocé cuánto consume cada electrodoméstico para entender mejor tu factura.</p>
+    <div class="consumo-table-wrapper">
+      <table class="consumo-table">
+        <thead>
+          <tr>
+            <th>Equipamiento</th>
+            <th>Consumo mensual aproximado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Heladera</td><td>30 a 60 kWh</td></tr>
+          <tr><td>TV LED</td><td>10 a 20 kWh</td></tr>
+          <tr><td>PC de escritorio</td><td>20 a 50 kWh</td></tr>
+          <tr><td>Aire acondicionado</td><td>100 a 300 kWh</td></tr>
+          <tr><td>Lavarropas</td><td>10 a 30 kWh</td></tr>
+          <tr><td>Microondas</td><td>5 a 15 kWh</td></tr>
+          <tr><td>Iluminación LED</td><td>10 a 40 kWh</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt anim-fade-up" appScrollAnimation>
+  <div class="container" style="text-align:center;">
+    <h2 class="section__title">Simulador de ahorro</h2>
+    <p class="section__subtitle" style="margin-left:auto;margin-right:auto;">Calculá cuánto podés ahorrar instalando paneles solares en tu casa.</p>
+    <app-simulador-ahorro />
+  </div>
+</section>
+
+<section class="section section--alt anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <div class="solar-info">
+      <img src="/img/Sistema-conectado-a-la-red.jpg" alt="Esquema de sistema solar conectado a la red" loading="lazy" class="solar-info__img anim-fade-left anim-delay-1" appScrollAnimation>
+      <div class="solar-info__text anim-fade-right anim-delay-2" appScrollAnimation>
+        <h2>¿Cómo funciona?</h2>
+        <p>Los paneles convierten la luz del sol en electricidad. Durante el día generás tu propia energía; si sobra, se inyecta a la red y te pagan un crédito. A la noche o en días nublados, usás la electricidad de siempre.</p>
+        <p>Es simple: menos consumo de la red = menos plata en tu factura.</p>
+      </div>
+    </div>
+  </div>
+</section>
+

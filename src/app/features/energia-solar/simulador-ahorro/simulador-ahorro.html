@@ -1,0 +1,67 @@
+<div class="simulador">
+  <div class="simulador__field">
+    <label class="simulador__label" for="consumo">Tu consumo mensual aproximado (kWh)</label>
+    <input id="consumo" type="range" min="100" max="1500" step="10" class="simulador__range"
+      [value]="consumoActual()" (input)="setConsumo($any($event.target).value)">
+    <div class="simulador__value">{{ consumoActual() }} kWh</div>
+  </div>
+
+  <div class="simulador__results">
+    <div class="simulador__result">
+      <span class="simulador__result-icon">☀️</span>
+      <div>
+        <p class="simulador__result-label">Paneles necesarios</p>
+        <p class="simulador__result-value">{{ paneles() }}</p>
+      </div>
+    </div>
+
+
+
+    <div class="simulador__result">
+      <span class="simulador__result-icon">🌱</span>
+      <div>
+        <p class="simulador__result-label">CO₂ evitado por año</p>
+        <p class="simulador__result-value">{{ co2() }} kg</p>
+      </div>
+    </div>
+
+    <div class="simulador__result simulador__result--highlight">
+      <span class="simulador__result-icon">🏆</span>
+      <div>
+        <p class="simulador__result-label">Ahorro estimado en 5 años</p>
+        <p class="simulador__result-value">$ {{ ahorro5a() | number }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="simulador__precios">
+    <div class="simulador__precio">
+      <span class="simulador__precio-label">Precio cooperativa</span>
+      <span class="simulador__precio-value simulador__precio-value--coop">$ {{ costoKwhCoop }} / kWh</span>
+    </div>
+    <div class="simulador__precio">
+      <span class="simulador__precio-label">Precio empresa privada</span>
+      <span class="simulador__precio-value simulador__precio-value--priv">$ {{ costoKwhPriv }} / kWh</span>
+    </div>
+  </div>
+
+  <div class="simulador__comparacion">
+    <p class="simulador__comparacion-title">Con tu consumo actual:</p>
+    <div class="simulador__comparacion-row">
+      <span>Factura en cooperativa</span>
+      <strong>$ {{ facturaCoop() | number }} / mes</strong>
+    </div>
+    <div class="simulador__comparacion-row">
+      <span>Factura en empresa privada</span>
+      <strong>$ {{ facturaPriv() | number }} / mes</strong>
+    </div>
+    <div class="simulador__comparacion-row simulador__comparacion-row--ahorro">
+      <span>Ahorro mensual siendo socio</span>
+      <strong>$ {{ ahorroVsPriv() | number }} / mes</strong>
+    </div>
+  </div>
+
+  <p class="simulador__note">
+    * Estimación basada en un 60% de reducción del consumo de red con paneles. Consultanos para un cálculo personalizado.
+  </p>
+</div>

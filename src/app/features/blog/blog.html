@@ -1,0 +1,105 @@
+<section class="section blog-hero anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <h1 class="section__title">Novedades e Informes Abiertos</h1>
+    <p class="section__subtitle">Todo lo que pasa en la cooperativa y en el barrio, contado por nosotros. Sin filtros, sin vueltas.</p>
+  </div>
+</section>
+
+<section class="section section--alt anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <h2 class="section__title" style="font-size:1.5rem;">Últimas novedades</h2>
+    <div class="blog-grid">
+      @for (post of posts; track post.title; let i = $index) {
+        <article class="blog-card anim-fade-up" [class.anim-delay-1]="i===0" [class.anim-delay-2]="i===1" [class.anim-delay-3]="i===2" appScrollAnimation>
+          <div class="blog-card__img">
+            <img [src]="post.img" [alt]="post.title" loading="lazy">
+          </div>
+          <div class="blog-card__body">
+            <div class="blog-card__meta">
+              <span class="blog-card__category">{{ post.category }}</span>
+              <span class="blog-card__date">{{ post.date }}</span>
+            </div>
+            <h3 class="blog-card__title">{{ post.title }}</h3>
+            <p class="blog-card__text">{{ post.summary }}</p>
+            <a href="#" class="blog-card__link">Leer más →</a>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <h2 class="section__title" style="font-size:1.5rem;">Las Cuentas Claras</h2>
+    <p style="color:var(--color-text-light);margin-bottom:2rem;">¿A dónde va la plata que pagás de luz? Acá te mostramos el desglose, con datos reales y descargables.</p>
+
+    <div class="cuentas">
+      <div class="cuentas__chart">
+        <div class="donut">
+          <svg viewBox="0 0 100 100" class="donut__svg">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#e8edf0" stroke-width="14"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#1a3c34" stroke-width="14" stroke-dasharray="132 132" stroke-dashoffset="-33" transform="rotate(-90 50 50)" stroke-linecap="round"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#f5a623" stroke-width="14" stroke-dasharray="92 264" stroke-dashoffset="-165" transform="rotate(-90 50 50)" stroke-linecap="round"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#2e7d32" stroke-width="14" stroke-dasharray="50 264" stroke-dashoffset="-257" transform="rotate(-90 50 50)" stroke-linecap="round"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#d32f2f" stroke-width="14" stroke-dasharray="20 264" stroke-dashoffset="-277" transform="rotate(-90 50 50)" stroke-linecap="round"/>
+          </svg>
+          <div class="donut__label">
+            <span class="donut__total">$1</span>
+            <span class="donut__sub">por socio</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cuentas__items">
+        <div class="cuenta-item">
+          <span class="cuenta-item__color" style="background:#1a3c34;"></span>
+          <div>
+            <strong>Mantenimiento de red (40%)</strong>
+            <p>Cables, postes, transformadores y personal técnico del barrio.</p>
+          </div>
+        </div>
+        <div class="cuenta-item">
+          <span class="cuenta-item__color" style="background:#f5a623;"></span>
+          <div>
+            <strong>Sueldos locales (28%)</strong>
+            <p>Empleados de la cooperativa que viven acá mismo, en el barrio.</p>
+          </div>
+        </div>
+        <div class="cuenta-item">
+          <span class="cuenta-item__color" style="background:#2e7d32;"></span>
+          <div>
+            <strong>Fondo solar (15%)</strong>
+            <p>Inversión en paneles solares comunitarios y eficiencia energética.</p>
+          </div>
+        </div>
+        <div class="cuenta-item">
+          <span class="cuenta-item__color" style="background:#d32f2f;"></span>
+          <div>
+            <strong>Admin. y otros (17%)</strong>
+            <p>Gastos administrativos, impuestos y fondos de reserva.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;">
+      <h3 style="font-size:1.2rem;color:var(--color-primary);margin-bottom:1rem;">Informes descargables</h3>
+      <div class="informes">
+        @for (inf of informes; track inf.title) {
+          <div class="informe-card">
+            <div class="informe-card__icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div>
+              <h4 class="informe-card__title">{{ inf.title }}</h4>
+              <p class="informe-card__date">{{ inf.date }}</p>
+              <p class="informe-card__desc">{{ inf.description }}</p>
+              <a href="#" class="btn btn--outline" style="margin-top:0.5rem;font-size:0.85rem;padding:0.4rem 1rem;">Descargar PDF</a>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,121 @@
+.semaforo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0.5rem 0;
+
+  &__lights {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  &__light {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid #d0d8d4;
+    background: #e8edf0;
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+
+    &--green.active,
+    &--green.semaforo__light--active {
+      background: #2e7d32;
+      border-color: #1b5e20;
+      box-shadow: 0 0 16px rgba(46, 125, 50, 0.5);
+    }
+
+    &--yellow.active,
+    &--yellow.semaforo__light--active {
+      background: #f5a623;
+      border-color: #e09510;
+      box-shadow: 0 0 16px rgba(245, 166, 35, 0.5);
+    }
+
+    &--red.active,
+    &--red.semaforo__light--active {
+      background: #d32f2f;
+      border-color: #b71c1c;
+      box-shadow: 0 0 16px rgba(211, 47, 47, 0.5);
+    }
+  }
+
+  &__info {
+    text-align: center;
+  }
+
+  &__kwh {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    color: var(--color-primary);
+
+    strong {
+      font-size: 2rem;
+    }
+  }
+
+  &__label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+
+    &--green { color: #2e7d32; }
+    &--yellow { color: #e09510; }
+    &--red { color: #d32f2f; }
+  }
+
+  &__advice {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    line-height: 1.4;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  &__bar {
+    margin-top: 0.5rem;
+  }
+
+  &__bar-track {
+    display: flex;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    background: #e8edf0;
+  }
+
+  &__bar-seg {
+    height: 100%;
+
+    &--green { background: #2e7d32; }
+    &--yellow { background: #f5a623; }
+    &--red { background: #d32f2f; }
+  }
+
+  &__bar-indicator {
+    position: absolute;
+    top: -6px;
+    transform: translateX(-50%);
+    transition: left 0.4s ease;
+    z-index: 2;
+  }
+
+  &__bar-dot {
+    display: block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: inherit;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  &__bar-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.3rem;
+    font-size: 0.72rem;
+    color: var(--color-text-light);
+  }
+}

@@ -1,0 +1,350 @@
+<section class="section cuenta-hero anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <h1 class="section__title">Sucursal Virtual</h1>
+    <p class="section__subtitle">Ingresá con tu DNI y número de cliente para ver tu factura, controlar tu consumo y más.</p>
+  </div>
+</section>
+
+<section class="section section--alt anim-fade-up" appScrollAnimation>
+  <div class="container">
+    @switch (step()) {
+      @case ('login') {
+        <div class="login-card">
+          <h2 class="login-card__title">Ingresá a tu cuenta</h2>
+
+          @if (error()) {
+            <div class="login-card__error">{{ error() }}</div>
+          }
+
+          <form class="login-form" (ngSubmit)="ingresar()" #loginForm="ngForm">
+            <div class="form__field">
+              <label for="dni" class="form__label">DNI</label>
+              <input id="dni" name="dni" class="form__input" [(ngModel)]="form.dni" placeholder="Ej: 12345678">
+            </div>
+            <div class="form__field">
+              <label for="nroCliente" class="form__label">Número de cliente</label>
+              <input id="nroCliente" name="nroCliente" class="form__input" [(ngModel)]="form.numeroCliente" placeholder="Ej: 100234">
+            </div>
+            <button type="submit" class="btn btn--primary">Ingresar</button>
+          </form>
+
+          <details class="login-card__hint">
+            <summary>Olvidaste tus datos?</summary>
+            <ul>
+              <li><strong>DNI:</strong> 12345678 / <strong>Cliente:</strong> 100234 — Lucía G.</li>
+              <li><strong>DNI:</strong> 23456789 / <strong>Cliente:</strong> 100451 — Roberto M.</li>
+              <li><strong>DNI:</strong> 34567890 / <strong>Cliente:</strong> 100687 — Ana M.</li>
+              <li><strong>DNI:</strong> 45678901 / <strong>Cliente:</strong> 100892 — Carlos P.</li>
+            </ul>
+          </details>
+        </div>
+      }
+
+      @case ('loading') {
+        <div class="loader">
+          <div class="loader__spinner"></div>
+          <p class="loader__text">Buscando tus datos…</p>
+        </div>
+      }
+
+      @case ('dashboard') {
+        @let u = user()!;
+        @let pend = pendingInvoice();
+
+        <div class="dashboard">
+          <div class="dashboard__top anim-fade-up" appScrollAnimation>
+            <div class="dashboard__top-info">
+              <h2 class="dashboard__title">Hola, {{ u.nombre }} {{ u.apellido }}</h2>
+              <p class="dashboard__subtitle">
+                Nº de cliente: {{ u.numeroCliente }} · {{ u.barrio }} · {{ u.categoria }}
+              </p>
+            </div>
+            <button class="btn btn--outline dashboard__logout" (click)="cerrarSesion()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Cerrar sesión
+            </button>
+          </div>
+
+          @if (pend) {
+            <div class="dashboard__next-pay anim-fade-up anim-delay-1" appScrollAnimation>
+              <div class="next-pay">
+                <div class="next-pay__info">
+                  <span class="next-pay__badge" [class.next-pay__badge--overdue]="pend.status === 'overdue'">
+                    {{ pend.status === 'overdue' ? '⚠ VENCIDA' : '📄 PRÓXIMA FACTURA' }}
+                  </span>
+                  <h3 class="next-pay__period">{{ pend.period }}</h3>
+                  <p class="next-pay__due">Vence: {{ pend.dueDate }}</p>
+                </div>
+                <div class="next-pay__amount-side">
+                  <p class="next-pay__amount">$ {{ pend.total | number }}</p>
+                  <p class="next-pay__consumption">{{ pend.consumption }} kWh consumidos</p>
+                  <div class="next-pay__actions">
+                    <button class="btn btn--primary" (click)="pagarFactura()">Pagar factura</button>
+                    <button class="btn btn--outline" (click)="verDetalle(pend)">Ver detalle</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <div class="dashboard__next-pay anim-fade-up anim-delay-1" appScrollAnimation>
+              <div class="next-pay next-pay--paid">
+                <p class="next-pay__all-paid">✅ Todas tus facturas están al día. ¡Gracias por ser socio/a!</p>
+              </div>
+            </div>
+          }
+
+          <div class="dashboard__grid">
+            <div class="dashboard-card anim-fade-up anim-delay-2" appScrollAnimation>
+              <h3 class="dashboard-card__title">Consumo del mes</h3>
+              <p class="dashboard-card__amount">{{ consumption() }} kWh</p>
+              <p class="dashboard-card__date">Últimos 30 días</p>
+            </div>
+
+            <div class="dashboard-card anim-fade-up anim-delay-3" appScrollAnimation>
+              <h3 class="dashboard-card__title">Dirección</h3>
+              <p class="dashboard-card__address">{{ u.direccion }}</p>
+              <p class="dashboard-card__date">{{ u.barrio }}</p>
+            </div>
+
+            <div class="dashboard-card dashboard-card--wide anim-fade-up anim-delay-4" appScrollAnimation>
+              <h3 class="dashboard-card__title">Semáforo de consumo</h3>
+              <app-semaforo-consumo [consumption]="consumption()" />
+            </div>
+          </div>
+
+          <div class="dashboard-chart anim-fade-up anim-delay-5" appScrollAnimation>
+            <div class="dashboard-chart__header">
+              <span class="dashboard-chart__icon">📊</span>
+              <h3 class="dashboard-chart__title">Tu consumo en los últimos meses</h3>
+            </div>
+            <div class="dashboard-chart__bars">
+              @for (inv of allInvoices(); track inv.id) {
+                <div class="chart-bar" [class.chart-bar--estimated]="inv.estimated">
+                  <div class="chart-bar__fill" [style.height.px]="barHeight(inv.consumption)" [style.background]="barColor(inv.consumption)">
+                    <span class="chart-bar__value">{{ inv.consumption }}</span>
+                  </div>
+                  <span class="chart-bar__label">{{ inv.period }}</span>
+                </div>
+              }
+            </div>
+            @if (hasEstimated()) {
+              <div class="chart-legend">
+                <span class="chart-legend__item">
+                  <span class="chart-legend__swatch chart-legend__swatch--real"></span>
+                  Consumo real
+                </span>
+                <span class="chart-legend__item">
+                  <span class="chart-legend__swatch chart-legend__swatch--estimated"></span>
+                  Consumo estimado
+                </span>
+              </div>
+            }
+
+            <div class="dashboard-chart__metrics">
+              <div class="chart-metric">
+                <span class="chart-metric__icon">📏</span>
+                <span class="chart-metric__value">{{ avgConsumption() }}</span>
+                <span class="chart-metric__label">Promedio mensual</span>
+              </div>
+              <div class="chart-metric">
+                <span class="chart-metric__icon">⬇️</span>
+                <span class="chart-metric__value">{{ minConsumption() }}</span>
+                <span class="chart-metric__label">Mínimo</span>
+              </div>
+              <div class="chart-metric">
+                <span class="chart-metric__icon">⬆️</span>
+                <span class="chart-metric__value">{{ maxConsumption() }}</span>
+                <span class="chart-metric__label">Máximo</span>
+              </div>
+              <div class="chart-metric">
+                <span class="chart-metric__icon">📈</span>
+                <span class="chart-metric__value" [class.chart-metric__value--up]="trend() === 'up'" [class.chart-metric__value--down]="trend() === 'down'">
+                  {{ trend() === 'up' ? 'Subiendo' : trend() === 'down' ? 'Bajando' : 'Estable' }}
+                </span>
+                <span class="chart-metric__label">Tendencia</span>
+              </div>
+            </div>
+          </div>
+
+          @let all = allInvoicesSorted();
+          @if (all.length > 0) {
+            <div class="dashboard__history anim-fade-up anim-delay-5" appScrollAnimation>
+              <h3 class="dashboard__history-title">Todas las facturas</h3>
+              <div class="history-list">
+                @for (inv of all; track inv.id) {
+                  <div class="history-item">
+                    <div class="history-item__left">
+                      <span class="history-item__period">{{ inv.period }}</span>
+                      <span class="history-item__meta">$ {{ inv.total | number }} · {{ inv.consumption }} kWh</span>
+                    </div>
+                    <div class="history-item__right">
+                      @if (inv.status === 'paid') {
+                        <span class="history-item__badge history-item__badge--paid">Pagada el {{ inv.paidDate }}</span>
+                      } @else if (inv.status === 'overdue') {
+                        <span class="history-item__badge history-item__badge--overdue">Vencida</span>
+                      } @else {
+                        <span class="history-item__badge history-item__badge--pending">Pendiente</span>
+                      }
+                      <button class="btn btn--outline" style="font-size:0.8rem;padding:0.3rem 0.8rem;" (click)="verDetalle(inv)">Ver detalle</button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <div class="dashboard-tutorials anim-fade-up anim-delay-5" appScrollAnimation>
+            <h3 class="dashboard-tutorials__title">Videotutoriales</h3>
+            <div class="tutorials-grid">
+              <a href="#" class="tutorial-card">
+                <span class="tutorial-card__icon">▶️</span>
+                <span>Cómo leer tu factura</span>
+              </a>
+              <a href="#" class="tutorial-card">
+                <span class="tutorial-card__icon">▶️</span>
+                <span>Cómo usar la web</span>
+              </a>
+              <a href="#" class="tutorial-card">
+                <span class="tutorial-card__icon">▶️</span>
+                <span>Consejos para ahorrar energía</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</section>
+
+@if (detailInvoice(); as inv) {
+  @let cp = chartPoints();
+  @let cm = chartMetrics();
+  @let tt = chartTooltip();
+  <div class="modal-overlay" (click)="cerrarDetalle()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal__header">
+        <h2 class="modal__title">Factura {{ inv.period }}</h2>
+        <button class="modal__close" (click)="cerrarDetalle()" aria-label="Cerrar">&times;</button>
+      </div>
+
+      <div class="modal__body">
+        <div class="modal__row">
+          <span>Factura N°</span><strong>{{ inv.id }}</strong>
+        </div>
+        <div class="modal__row">
+          <span>Estado</span>
+          <strong [class]="'modal__status--' + inv.status">
+            {{ inv.status === 'paid' ? 'Pagada' : inv.status === 'overdue' ? 'Vencida' : 'Pendiente' }}
+          </strong>
+        </div>
+        <div class="modal__row">
+          <span>Fecha de emisión</span><strong>{{ inv.issuedDate }}</strong>
+        </div>
+        <div class="modal__row">
+          <span>Fecha de vencimiento</span><strong>{{ inv.dueDate }}</strong>
+        </div>
+        @if (inv.paidDate) {
+          <div class="modal__row">
+            <span>Pagada el</span><strong>{{ inv.paidDate }}</strong>
+          </div>
+        }
+
+        <div class="modal__divider"></div>
+
+        <div class="modal__section-title">Detalle de cargos</div>
+
+        <div class="modal__row">
+          <span>Cargo fijo</span><strong>$ {{ inv.details.cargoFijo | number }}</strong>
+        </div>
+        <div class="modal__row">
+          <span>Consumo ({{ inv.consumption }} kWh)</span><strong>$ {{ inv.details.consumo | number }}</strong>
+        </div>
+        <div class="modal__row">
+          <span>Impuestos municipales</span><strong>$ {{ inv.details.impuestos | number }}</strong>
+        </div>
+        <div class="modal__row">
+          <span>Fondo solar comunitario</span><strong>$ {{ inv.details.fondoSolar | number }}</strong>
+        </div>
+        <div class="modal__row">
+          <span>Mantenimiento de red</span><strong>$ {{ inv.details.mantenimiento | number }}</strong>
+        </div>
+
+        <div class="modal__divider"></div>
+
+        <div class="modal__row modal__row--total">
+          <span>Total</span><strong>$ {{ inv.total | number }}</strong>
+        </div>
+
+        <div class="modal__row modal__row--total">
+          <span>Consumo</span><strong>{{ inv.consumption }} kWh</strong>
+        </div>
+
+        <div class="modal__divider"></div>
+
+        <div class="modal__section-title">Consumo diario</div>
+
+        @if (cp && cm) {
+          <div class="daily-chart">
+            <svg
+              [attr.viewBox]="'0 0 ' + cp.w + ' ' + (cp.h + 20)"
+              class="daily-chart__svg"
+              (mousemove)="onChartHover($event, $any($event.target).closest('svg'))"
+              (mouseleave)="onChartLeave()"
+            >
+              <defs>
+                <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#2e7d32" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#2e7d32" stop-opacity="0.02"/>
+                </linearGradient>
+              </defs>
+              <path [attr.d]="cp.areaPath" fill="url(#areaGrad)"/>
+              <path [attr.d]="cp.smoothLine" fill="none" stroke="#2e7d32" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+              @if (tt) {
+                <line [attr.x1]="tt.x + '%'" y1="0" [attr.x2]="tt.x + '%'" y2="200" stroke="#2e7d32" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/>
+                <circle [attr.cx]="tt.x + '%'" [attr.cy]="tt.y" r="5" fill="#2e7d32" stroke="#fff" stroke-width="2"/>
+              }
+            </svg>
+
+            @if (tt) {
+              <div class="daily-chart__tooltip" [style.left.%]="tt.x" [style.top]="'10px'">
+                <span class="daily-chart__tooltip-day">Día {{ tt.day }}</span>
+                <span class="daily-chart__tooltip-val">{{ tt.value }} kWh</span>
+              </div>
+            }
+
+            <div class="daily-chart__metrics">
+              <div class="daily-metric">
+                <span class="daily-metric__icon">⚡</span>
+                <span class="daily-metric__value">{{ cm.total }} kWh</span>
+                <span class="daily-metric__label">Total del período</span>
+              </div>
+              <div class="daily-metric">
+                <span class="daily-metric__icon">📊</span>
+                <span class="daily-metric__value">{{ cm.avg }} kWh</span>
+                <span class="daily-metric__label">Promedio diario</span>
+              </div>
+              <div class="daily-metric">
+                <span class="daily-metric__icon">⬆️</span>
+                <span class="daily-metric__value">{{ cm.max.value }} kWh</span>
+                <span class="daily-metric__label">Día {{ cm.max.day }} (máximo)</span>
+              </div>
+              <div class="daily-metric">
+                <span class="daily-metric__icon">⬇️</span>
+                <span class="daily-metric__value">{{ cm.min.value }} kWh</span>
+                <span class="daily-metric__label">Día {{ cm.min.day }} (mínimo)</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="modal__footer">
+        @if (inv.status === 'pending' || inv.status === 'overdue') {
+          <button class="btn btn--primary" (click)="pagarFactura(); cerrarDetalle()">Pagar factura</button>
+        }
+        <button class="btn btn--outline" (click)="cerrarDetalle()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+}

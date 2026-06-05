@@ -1,0 +1,50 @@
+.participa-hero {
+  background: linear-gradient(135deg, #1a3c34 0%, #2a5a4e 100%);
+  color: #fff;
+
+  .section__title { color: #fff; }
+  .section__subtitle { color: #cce0d8; }
+}
+
+.pasos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.paso {
+  text-align: center;
+
+  &__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: var(--color-primary);
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.4rem;
+  }
+
+  &__text {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

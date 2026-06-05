@@ -1,0 +1,91 @@
+<section class="section capacita-hero anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <h1 class="section__title">El Rincón Joven</h1>
+    <p class="section__subtitle">Capacitación gratuita en instalación y mantenimiento de sistemas fotovoltaicos. Dale un futuro a tu barrio… y al tuyo.</p>
+  </div>
+</section>
+
+<section class="section section--alt anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <div class="capacita-intro">
+      <div class="capacita-intro__img anim-fade-left anim-delay-1" appScrollAnimation>
+        <img src="/img/casco-tecnico.jpg" alt="Jóvenes trabajando con paneles solares en un taller práctico" loading="lazy">
+      </div>
+      <div class="capacita-intro__text anim-fade-right anim-delay-2" appScrollAnimation>
+        <h2>¿De qué se trata?</h2>
+        <p>El Rincón Joven es un programa gratuito de la cooperativa para formar a jóvenes del barrio en <strong>instalación, mantenimiento y reparación de sistemas de energía solar fotovoltaica</strong>.</p>
+        <p>No hace falta experiencia previa. Al finalizar, te ayudamos a conseguir tus primeros trabajos.</p>
+
+        <div class="capacita-highlights">
+          <div class="capacita-highlight anim-scale anim-delay-3" appScrollAnimation>
+            <span class="capacita-highlight__num">8</span>
+            <span class="capacita-highlight__label">Clases teórico-prácticas</span>
+          </div>
+          <div class="capacita-highlight anim-scale anim-delay-4" appScrollAnimation>
+            <span class="capacita-highlight__num">100%</span>
+            <span class="capacita-highlight__label">Gratuito</span>
+          </div>
+          <div class="capacita-highlight anim-scale anim-delay-5" appScrollAnimation>
+            <span class="capacita-highlight__num">16+</span>
+            <span class="capacita-highlight__label">Edad mínima</span>
+          </div>
+          <div class="capacita-highlight anim-scale anim-delay-5" appScrollAnimation>
+            <span class="capacita-highlight__num">🎓</span>
+            <span class="capacita-highlight__label">Certificado cooperativo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <div class="capacita-form-section">
+      <div class="capacita-form-section__text">
+        <h2 class="section__title" style="margin-bottom:1rem;">Inscribite ahora</h2>
+        <p style="color:var(--color-text-light);margin-bottom:2rem;">Completá el formulario y nos contactamos para contarte los detalles del próximo curso.</p>
+
+        @if (!enviado()) {
+          <form class="form" (ngSubmit)="enviarFormulario()" #f="ngForm">
+            <div class="form__field">
+              <label for="nombre" class="form__label">Nombre completo</label>
+              <input id="nombre" name="nombre" class="form__input" [(ngModel)]="form.nombre" required placeholder="Ej: Lucía Gómez">
+            </div>
+            <div class="form__row">
+              <div class="form__field">
+                <label for="email" class="form__label">Email</label>
+                <input id="email" name="email" type="email" class="form__input" [(ngModel)]="form.email" required placeholder="tumail@ejemplo.com">
+              </div>
+              <div class="form__field">
+                <label for="telefono" class="form__label">Teléfono</label>
+                <input id="telefono" name="telefono" type="tel" class="form__input" [(ngModel)]="form.telefono" required placeholder="11-2345-6789">
+              </div>
+            </div>
+            <div class="form__row">
+              <div class="form__field">
+                <label for="edad" class="form__label">Edad</label>
+                <input id="edad" name="edad" type="number" class="form__input" [(ngModel)]="form.edad" required placeholder="16+">
+              </div>
+              <div class="form__field">
+                <label for="barrio" class="form__label">Barrio / Localidad</label>
+                <input id="barrio" name="barrio" class="form__input" [(ngModel)]="form.barrio" required placeholder="Ej: Villa Crespo">
+              </div>
+            </div>
+            <div class="form__field">
+              <label for="motivo" class="form__label">¿Por qué querés sumarte?</label>
+              <textarea id="motivo" name="motivo" class="form__input form__textarea" [(ngModel)]="form.motivo" rows="3" placeholder="Contanos brevemente…"></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary btn--large" style="margin-top:0.5rem;">Enviar inscripción</button>
+          </form>
+        } @else {
+          <div class="form-success">
+            <span class="form-success__icon">🎉</span>
+            <h3 class="form-success__title">¡Inscripción recibida!</h3>
+            <p class="form-success__text">Te vamos a contactar pronto con toda la información del próximo curso. ¡Bienvenido/a al Rincón Joven!</p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,158 @@
+@let v = voting();
+@let u = authSvc.user();
+
+<div class="voting">
+  <div class="voting__header">
+    <h2 class="voting__title">{{ v.title }}</h2>
+    <p class="voting__desc">{{ v.description }}</p>
+    <div class="voting__meta">
+      <span class="voting__meta-item">🗓️ {{ v.month }}</span>
+      <span class="voting__meta-item">⏱️ {{ daysLeft() }} días restantes</span>
+      <span class="voting__meta-item">👥 {{ v.totalVotes }} votos emitidos</span>
+    </div>
+  </div>
+
+  <div class="voting__budget">
+    <span class="voting__budget-icon">💰</span>
+    <div>
+      <strong>Presupuesto: ${{ v.budget | number }}</strong>
+      <p>{{ v.budgetDescription }}</p>
+    </div>
+  </div>
+
+  @switch (step()) {
+    @case ('login') {
+      <div class="voting__login-card">
+        <h3 class="voting__login-title">Identificate como socio/a para votar</h3>
+        <p class="voting__login-desc">Usá tu DNI y número de cliente (los mismos que en la Sucursal Virtual).</p>
+
+        @if (error()) {
+          <div class="voting__login-error">{{ error() }}</div>
+        }
+
+        <form class="voting__login-form" (ngSubmit)="ingresar()">
+          <div class="form__field">
+            <label for="vot-dni" class="form__label">DNI</label>
+            <input id="vot-dni" name="vot-dni" class="form__input" [(ngModel)]="form.dni" placeholder="Ej: 12345678">
+          </div>
+          <div class="form__field">
+            <label for="vot-cliente" class="form__label">Número de cliente</label>
+            <input id="vot-cliente" name="vot-cliente" class="form__input" [(ngModel)]="form.numeroCliente" placeholder="Ej: 100234">
+          </div>
+          <button type="submit" class="btn btn--primary">Identificarme y votar</button>
+        </form>
+
+        <details class="voting__login-hint">
+          <summary>Olvidaste tus datos?</summary>
+          <ul>
+            <li><strong>DNI:</strong> 12345678 / <strong>Cliente:</strong> 100234 — Lucía G.</li>
+            <li><strong>DNI:</strong> 23456789 / <strong>Cliente:</strong> 100451 — Roberto M.</li>
+            <li><strong>DNI:</strong> 34567890 / <strong>Cliente:</strong> 100687 — Ana M.</li>
+            <li><strong>DNI:</strong> 45678901 / <strong>Cliente:</strong> 100892 — Carlos P.</li>
+          </ul>
+        </details>
+      </div>
+    }
+
+    @case ('voting') {
+      <div class="voting__session">
+        <div class="voting__session-bar">
+          <span>✅ Socio/a: <strong>{{ u?.nombre }} {{ u?.apellido }}</strong></span>
+          <button class="voting__session-exit" (click)="cerrarSesion()">Cerrar sesión</button>
+        </div>
+
+        <h3 class="voting__choose-title">Elegí una opción</h3>
+        <p class="voting__participacion">📊 Participación anterior: {{ v.participacionAnt }}</p>
+
+        <div class="voting__options">
+          <button class="voting__option" (click)="votar(v.options[0].id)">
+            <span class="voting__option-icon">{{ v.options[0].icon }}</span>
+            <div class="voting__option-body">
+              <h4 class="voting__option-title">{{ v.options[0].title }}</h4>
+              <p class="voting__option-desc">{{ v.options[0].description }}</p>
+              <div class="voting__option-extras">
+                <span>⏱️ {{ v.options[0].duration }}</span>
+                <span>🎯 {{ v.options[0].impact }}</span>
+              </div>
+            </div>
+            <span class="voting__option-arrow">→</span>
+          </button>
+
+          <button class="voting__option" (click)="votar(v.options[1].id)">
+            <span class="voting__option-icon">{{ v.options[1].icon }}</span>
+            <div class="voting__option-body">
+              <h4 class="voting__option-title">{{ v.options[1].title }}</h4>
+              <p class="voting__option-desc">{{ v.options[1].description }}</p>
+              <div class="voting__option-extras">
+                <span>⏱️ {{ v.options[1].duration }}</span>
+                <span>🎯 {{ v.options[1].impact }}</span>
+              </div>
+            </div>
+            <span class="voting__option-arrow">→</span>
+          </button>
+        </div>
+      </div>
+    }
+
+    @case ('results') {
+      <div class="voting__results">
+        <div class="voting__session-bar">
+          <span>✅ Socio/a: <strong>{{ u?.nombre }} {{ u?.apellido }}</strong></span>
+          <button class="voting__session-exit" (click)="cerrarSesion()">Cerrar sesión</button>
+        </div>
+
+        <h3 class="voting__results-title">Resultados parciales</h3>
+        <p class="voting__participacion">📊 {{ v.participacionAnt }} · Total: {{ v.totalVotes }} votos</p>
+
+        @if (userVoted()) {
+          <div class="voting__voted-msg">
+            ✅ ¡Voto registrado! Gracias por participar, {{ u?.nombre }}.
+          </div>
+        }
+
+        <div class="voting__option-result">
+          <div class="voting__option-result-header">
+            <span class="voting__option-icon">{{ v.options[0].icon }}</span>
+            <div>
+              <strong>{{ v.options[0].title }}</strong>
+              <p class="voting__option-desc">{{ v.options[0].longDescription }}</p>
+            </div>
+            <span class="voting__option-pct">{{ percentageA() }}%</span>
+          </div>
+          <div class="voting__bar">
+            <div class="voting__bar-fill" [style.width.%]="percentageA()" style="background:#1a3c34;"></div>
+          </div>
+          <p class="voting__option-votes">{{ v.options[0].votes }} votos</p>
+          <div class="voting__option-impact">
+            <span>⏱️ {{ v.options[0].duration }}</span>
+            <span>🎯 {{ v.options[0].impact }}</span>
+          </div>
+        </div>
+
+        <div class="voting__option-result">
+          <div class="voting__option-result-header">
+            <span class="voting__option-icon">{{ v.options[1].icon }}</span>
+            <div>
+              <strong>{{ v.options[1].title }}</strong>
+              <p class="voting__option-desc">{{ v.options[1].longDescription }}</p>
+            </div>
+            <span class="voting__option-pct">{{ percentageB() }}%</span>
+          </div>
+          <div class="voting__bar">
+            <div class="voting__bar-fill" [style.width.%]="percentageB()" style="background:#f5a623;"></div>
+          </div>
+          <p class="voting__option-votes">{{ v.options[1].votes }} votos</p>
+          <div class="voting__option-impact">
+            <span>⏱️ {{ v.options[1].duration }}</span>
+            <span>🎯 {{ v.options[1].impact }}</span>
+          </div>
+        </div>
+
+        <div class="voting__bar-info">
+          <p>💰 Presupuesto disponible: <strong>${{ v.budget | number }}</strong></p>
+          <p>⏱️ Faltan <strong>{{ daysLeft() }} días</strong> para el cierre de la votación.</p>
+        </div>
+      </div>
+    }
+  }
+</div>

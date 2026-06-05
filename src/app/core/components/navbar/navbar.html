@@ -1,0 +1,59 @@
+<header class="navbar" [class.navbar--hidden]="hidden()">
+  <div class="navbar__inner">
+    <a class="navbar__logo" routerLink="/" (click)="closeMenu()">
+      <img src="img/logo-red-luz-sur.png" alt="Red Luz Sur" class="navbar__logo-img">
+    </a>
+
+    <button class="navbar__toggle" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" aria-label="Menú">
+      <span class="navbar__toggle-bar"></span>
+      <span class="navbar__toggle-bar"></span>
+      <span class="navbar__toggle-bar"></span>
+    </button>
+
+    <nav class="navbar__nav" [class.navbar__nav--open]="menuOpen()">
+      @for (link of links; track link.path) {
+        <a class="navbar__link" [routerLink]="[link.path]" routerLinkActive="navbar__link--active" [routerLinkActiveOptions]="{exact: link.path === '/'}" (click)="closeMenu()">
+          {{ link.label }}
+        </a>
+      }
+      @if (auth.isLoggedIn()) {
+        <div class="navbar__nav-user">
+          <div class="navbar__nav-user-info">
+            <span class="navbar__nav-user-avatar">{{ auth.initials() }}</span>
+            <div>
+              <p class="navbar__nav-user-name">{{ auth.user()?.nombre }} {{ auth.user()?.apellido }}</p>
+              <p class="navbar__nav-user-cliente">N° {{ auth.user()?.numeroCliente }}</p>
+            </div>
+          </div>
+          <button class="navbar__nav-user-logout" (click)="cerrarSesion(); closeMenu()">Cerrar sesión</button>
+        </div>
+      }
+    </nav>
+
+    @if (auth.isLoggedIn()) {
+      <div class="navbar__avatar-wrapper">
+        <button class="navbar__avatar" (click)="toggleAvatar()" [attr.aria-expanded]="avatarOpen()" aria-label="Mi sesión">
+          <span class="navbar__avatar-inner">{{ auth.initials() }}</span>
+        </button>
+
+        @if (avatarOpen()) {
+          <div class="navbar__dropdown" (mouseleave)="closeAvatar()">
+            <div class="navbar__dropdown-header">
+              <span class="navbar__dropdown-avatar">{{ auth.initials() }}</span>
+              <div>
+                <p class="navbar__dropdown-name">{{ auth.user()?.nombre }} {{ auth.user()?.apellido }}</p>
+                <p class="navbar__dropdown-cliente">N° {{ auth.user()?.numeroCliente }}</p>
+              </div>
+            </div>
+            <a class="navbar__dropdown-item" routerLink="/sucursal-virtual" (click)="closeAvatar(); closeMenu()">
+              Ir a Mi Cuenta
+            </a>
+            <button class="navbar__dropdown-item navbar__dropdown-item--danger" (click)="cerrarSesion()">
+              Cerrar sesión
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</header>

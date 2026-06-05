@@ -1,0 +1,80 @@
+<section class="section reclamos-hero anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <h1 class="section__title" style="color: white;">Aviso de falta de luz / Reclamos</h1>
+    <p class="section__subtitle">Informate sobre los problemas más comunes y registrá tu reclamo de forma rápida. Estamos para ayudarte.</p>
+  </div>
+</section>
+
+<section class="section section--alt anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <h2 class="section__title" style="margin-bottom:0.5rem;">Problemas frecuentes</h2>
+    <p style="color:var(--color-text-light);margin-bottom:2rem;">Estos son los motivos de reclamo más habituales en nuestra red. Revisá si alguno coincide con lo que estás experimentando.</p>
+    <div class="problemas-grid">
+      @for (p of problemas; track p.titulo) {
+        <article class="problema-card anim-fade-up" appScrollAnimation>
+          <span class="problema-card__icon">{{ p.icon }}</span>
+          <h3 class="problema-card__title">{{ p.titulo }}</h3>
+          <p class="problema-card__desc">{{ p.desc }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section anim-fade-up" appScrollAnimation>
+  <div class="container">
+    <div class="reclamo-form-section">
+      <h2 class="section__title" style="margin-bottom:1rem;">Registrá tu reclamo</h2>
+      <p style="color:var(--color-text-light);margin-bottom:2rem;">Completá el formulario y nos comunicamos a la brevedad para resolver el problema.</p>
+
+      @if (!enviado()) {
+        <form class="form" (ngSubmit)="enviarReclamo()" #f="ngForm">
+          <div class="form__row">
+            <div class="form__field">
+              <label for="nombre" class="form__label">Nombre completo</label>
+              <input id="nombre" name="nombre" class="form__input" [(ngModel)]="form.nombre" required placeholder="Ej: Lucía Gómez">
+            </div>
+            <div class="form__field">
+              <label for="numeroCliente" class="form__label">N° de cliente (si tenés)</label>
+              <input id="numeroCliente" name="numeroCliente" class="form__input" [(ngModel)]="form.numeroCliente" placeholder="Ej: 100234">
+            </div>
+          </div>
+          <div class="form__row">
+            <div class="form__field">
+              <label for="telefono" class="form__label">Teléfono de contacto</label>
+              <input id="telefono" name="telefono" type="tel" class="form__input" [(ngModel)]="form.telefono" required placeholder="11-2345-6789">
+            </div>
+            <div class="form__field">
+              <label for="direccion" class="form__label">Dirección del reclamo</label>
+              <input id="direccion" name="direccion" class="form__input" [(ngModel)]="form.direccion" required placeholder="Calle y altura, barrio">
+            </div>
+          </div>
+          <div class="form__field">
+            <label for="tipo" class="form__label">Tipo de problema</label>
+            <select id="tipo" name="tipo" class="form__input form__select" [(ngModel)]="form.tipo" required>
+              <option value="" disabled selected>Seleccioná una opción</option>
+              <option value="corte">Corte de luz total</option>
+              <option value="baja-tension">Baja tensión / Parpadeos</option>
+              <option value="medidor">Medidor averiado</option>
+              <option value="facturacion">Error en la facturación</option>
+              <option value="arboles">Árboles en el tendido</option>
+              <option value="cableado">Cableado caído o suelto</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+          <div class="form__field">
+            <label for="descripcion" class="form__label">Descripción del problema</label>
+            <textarea id="descripcion" name="descripcion" class="form__input form__textarea" [(ngModel)]="form.descripcion" rows="4" placeholder="Contanos con detalle qué está pasando, desde cuándo y si afecta a todo el barrio…"></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--large" style="margin-top:0.5rem;">Enviar reclamo</button>
+        </form>
+      } @else {
+        <div class="form-success">
+          <span class="form-success__icon">✅</span>
+          <h3 class="form-success__title">¡Reclamo registrado!</h3>
+          <p class="form-success__text">Te vamos a contactar a la brevedad. Si el problema es una emergencia (cable caído o riesgo eléctrico), llamá a nuestra línea de guardia: <strong>0800-333-RED</strong>.</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>

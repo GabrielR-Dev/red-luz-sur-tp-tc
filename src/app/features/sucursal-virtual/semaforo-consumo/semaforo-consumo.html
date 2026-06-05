@@ -1,0 +1,35 @@
+<div class="semaforo">
+  <div class="semaforo__lights">
+    <span class="semaforo__light semaforo__light--green" [class.semaforo__light--active]="level() === 'green'" aria-label="Verde"></span>
+    <span class="semaforo__light semaforo__light--yellow" [class.semaforo__light--active]="level() === 'yellow'" aria-label="Amarillo"></span>
+    <span class="semaforo__light semaforo__light--red" [class.semaforo__light--active]="level() === 'red'" aria-label="Rojo"></span>
+  </div>
+
+  <div class="semaforo__info">
+    <p class="semaforo__kwh">
+      <strong>{{ consumption() }}</strong> kWh este mes
+    </p>
+    <p class="semaforo__label" [class]="'semaforo__label--' + level()">
+      {{ levelLabel() }}
+    </p>
+    <p class="semaforo__advice">
+      {{ levelAdvice() }}
+    </p>
+  </div>
+
+  <div class="semaforo__bar">
+    <div class="semaforo__bar-track">
+      <span class="semaforo__bar-seg semaforo__bar-seg--green" [style.flex]="limits.green.max"></span>
+      <span class="semaforo__bar-seg semaforo__bar-seg--yellow" [style.flex]="limits.yellow.max - limits.green.max"></span>
+      <span class="semaforo__bar-seg semaforo__bar-seg--red" [style.flex]="8"></span>
+      <div class="semaforo__bar-indicator" [style.left.%]="barPercent()" [style.background]="level() === 'green' ? '#2e7d32' : level() === 'yellow' ? '#f5a623' : '#d32f2f'">
+        <span class="semaforo__bar-dot"></span>
+      </div>
+    </div>
+    <div class="semaforo__bar-labels">
+      <span>0 kWh</span>
+      <span>{{ limits.green.max }} kWh</span>
+      <span>{{ limits.yellow.max }}+ kWh</span>
+    </div>
+  </div>
+</div>
